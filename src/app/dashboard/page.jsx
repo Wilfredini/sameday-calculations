@@ -1,0 +1,5 @@
+const page = () => {
+  return <div className="px-4">Dashboard</div>;
+};
+
+export default page;
