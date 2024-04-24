@@ -45,7 +45,7 @@ const LoginForm = () => {
     <>
       <form
         onSubmit={handleSubmit}
-        className="dark:border dark:border-cyan-300 h-full w-full lg:w-3/4 xl:w-5/6 2xl:w-2/3 border-none md:border-solid flex flex-col justify-around columns-2 items-center gap-2 md:px-28 px-6 py-4  bg-gray-200 dark:bg-black rounded-2xl "
+        className="dark:border dark:border-cyan-300 h-full md:h-3/4 w-full lg:w-3/4 xl:w-5/6 2xl:w-2/3 border-none md:border-solid flex flex-col justify-around columns-2 items-center gap-2 md:px-28 px-6 py-4  bg-gray-200 dark:bg-black rounded-2xl "
       >
         <h1 className="text-2xl">Login Form</h1>
 
@@ -81,7 +81,7 @@ const LoginForm = () => {
 
         <Button
           type="submit"
-          className="p-4 h-14 w-full mt-8 dark:bg-cyan-500 text-white bg-gray-500"
+          className="md:p-4 p-3 h-14 w-full mt-8 dark:bg-cyan-500 text-white bg-gray-500"
         >
           Přihlásit
         </Button>

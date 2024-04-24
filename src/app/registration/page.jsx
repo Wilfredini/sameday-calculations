@@ -1,5 +1,4 @@
 import RegisterForm from "../components/registerForm/RegisterForm";
-import Loading from "../loading";
 
 const page = () => {
   return (

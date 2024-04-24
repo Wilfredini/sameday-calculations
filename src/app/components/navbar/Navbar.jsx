@@ -16,6 +16,7 @@ import { ThemeSwitcher } from "../ThemeSwitcher/ThemeSwitcher";
 import Image from "next/image";
 import ButtonSession from "../buttonSession/ButtonSession";
 import AvatarMenu from "../avatarMenu/AvatarMenu";
+import Link from "next/link";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,7 +32,11 @@ export default function Navigation() {
         aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         className="sm:hidden pr-3"
       />
-      <NavbarBrand className="text-gray-600 font-bold text-xl dark:text-white">
+      <NavbarBrand
+        as={Link}
+        href="/"
+        className="text-gray-600 font-bold text-xl dark:text-white"
+      >
         <Image
           src="/brand-dark.png"
           alt="logo"
@@ -55,11 +60,9 @@ export default function Navigation() {
       </NavbarContent>
 
       <NavbarContent justify="end">
-        <>
-          <NavbarItem className="flex">
-            <ButtonSession />
-          </NavbarItem>
-        </>
+        <NavbarItem className="hidden md:flex">
+          <ButtonSession />
+        </NavbarItem>
         <AvatarMenu />
 
         <NavbarItem className=" h-10 w-10 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 flex justify-center items-center">

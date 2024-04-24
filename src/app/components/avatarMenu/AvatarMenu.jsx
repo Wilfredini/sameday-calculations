@@ -15,7 +15,7 @@ export default function AvatarMenu() {
 
   if (status === "authenticated") {
     return (
-      <NavbarItem className="rounded-full cursor-pointer hover:scale-110">
+      <NavbarItem className="rounded-full cursor-pointer hover:scale-105">
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <User

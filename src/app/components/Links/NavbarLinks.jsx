@@ -7,7 +7,7 @@ const links = [
   {
     id: 1,
     title: "Nacenění",
-    slug: "/calculations",
+    slug: "/calculations/activeCalculations",
   },
   {
     id: 2,
