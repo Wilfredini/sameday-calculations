@@ -12,8 +12,7 @@ const CargodetailsForm = () => {
     register,
     handleSubmit,
     control,
-    setError,
-    reset,
+
     formState: { errors, isSubmitting, isSubmitted },
   } = useForm({
     defaultValues: [
@@ -25,8 +24,13 @@ const CargodetailsForm = () => {
         weight: "",
       },
     ],
+    transport: "",
     client: "",
     sdl: "",
+    price: "",
+    exwork: [{ cost: "" }],
+    menaFrom: "",
+    menaTo: "",
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -34,8 +38,27 @@ const CargodetailsForm = () => {
     control,
   });
 
+  const {
+    fields: exwFields,
+    append: exwAppend,
+    remove: exwRemove,
+  } = useFieldArray({
+    name: "exwork",
+    control,
+  });
+
   const onSubmit = async (data) => {
-    const { defaultValues, sdl, client } = data;
+    const {
+      defaultValues,
+      sdl,
+      client,
+      price,
+      transport,
+      menaFrom,
+      menaTo,
+      exwork,
+    } = data;
+    console.log(data);
     try {
       const res = await fetch("api/cargoDetails", {
         method: "POST",
@@ -44,8 +67,13 @@ const CargodetailsForm = () => {
         },
         body: JSON.stringify({
           defaultValues,
+          exwork,
+          menaFrom,
+          menaTo,
           sdl,
           client,
+          price,
+          transport,
         }),
       });
       if (res.ok) {
@@ -70,6 +98,9 @@ const CargodetailsForm = () => {
           remove={remove}
           isSubmitted={isSubmitted}
           isSubmitting={isSubmitting}
+          exwRemove={exwRemove}
+          exwFields={exwFields}
+          exwAppend={exwAppend}
         />
       </form>
 

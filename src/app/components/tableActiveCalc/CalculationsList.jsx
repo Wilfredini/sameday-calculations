@@ -1,7 +1,4 @@
-import Link from "next/link";
-import { FaEdit } from "react-icons/fa";
-import RemoveCalculations from "../removeCalculations/RemoveCalculations";
-
+import TableMap from "../table/Table";
 const getCalculations = async () => {
   try {
     const res = await fetch("http://localhost:3000/api/cargoDetails", {
@@ -17,42 +14,13 @@ const getCalculations = async () => {
   }
 };
 
-async function CalculationsList() {
+async function CalculationsList({ id }) {
   const { allCargoDetails } = await getCalculations();
+  const [defaultValues] = allCargoDetails;
 
   return (
     <div className="w-full flex justify-center p-8">
-      <table className="w-full text-center border border-separate shadow border-slate-300">
-        <thead className="bg-slate-300 text-white">
-          <tr>
-            <th>KLIENT</th>
-            <th>SDL</th>
-            <th>NÁKLAD</th>
-            <th>PRODEJKA</th>
-            <th>AKCE</th>
-          </tr>
-        </thead>
-        {allCargoDetails.map((details) => (
-          <tbody key={details._id} className="bg-gray-100">
-            <tr>
-              <td>{details.client}</td>
-              <td>{details.sdl}</td>
-              {details.defaultValues.map((detail) => (
-                <td key={detail.id}>{detail.count}</td>
-              ))}
-              {details.defaultValues.map((detail) => (
-                <td key={detail.id}>{detail.high}</td>
-              ))}
-              <td className="flex justify-around">
-                <Link href={`/editCalculations/${details._id}`}>
-                  <FaEdit className="text-green-300 cursor-pointer" />
-                </Link>
-                <RemoveCalculations id={details._id} />
-              </td>
-            </tr>
-          </tbody>
-        ))}
-      </table>
+      <TableMap allCargoDetails={[allCargoDetails]} id={id} />
     </div>
   );
 }

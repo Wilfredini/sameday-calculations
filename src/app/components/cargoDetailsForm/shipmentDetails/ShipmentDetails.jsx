@@ -1,123 +1,157 @@
 import { AiOutlinePlus } from "react-icons/ai";
 import { BiMinus } from "react-icons/bi";
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
+import { Select, SelectItem } from "@nextui-org/react";
+import { useState } from "react";
+import CurrencyInput from "../../currencyInput/CurrencyInput";
 
 const ShipmentDetails = ({
   fields,
   append,
-  isSubmitted,
   isSubmitting,
   errors,
   register,
   remove,
-  defaultValues,
+  exwFields,
+  exwAppend,
+  exwRemove,
 }) => {
+  let options = [
+    { label: "Export", value: "Export" },
+    { label: "Import", value: "Import" },
+  ];
+  const [shadow, setShadow] = useState("d-none");
+  console.log(fields);
   return (
-    <div className="flex flex-col gap-5">
-      <div>
+    <div className="flex flex-col w-full gap-5">
+      <div className="shadow-2xl my-10 p-10">
+        <div className="flex justify-center">
+          <Select
+            items={options}
+            label="Druh přepravy"
+            placeholder="Vyberte druh přepravy"
+            className="max-w-xs"
+            variant="bordered"
+            isInvalid={errors.transport ? true : false}
+            errorMessage={errors.client && "Vyber druh přepravy"}
+            classNames={{
+              inputWrapper: "bg-white dark:bg-zinc-700 p-0",
+              input: "p-2",
+            }}
+            {...register(`transport`, {
+              required: {
+                value: true,
+              },
+            })}
+          >
+            {options.map((option) => (
+              <SelectItem key={option.value}>{option.value}</SelectItem>
+            ))}
+          </Select>
+        </div>
         <div className="flex flex-row justify-around items-center">
-          <div className="flex flex-col w-64">
-            <label htmlFor="client" className="font-bold dark:text-cyan-300">
-              Klient
-            </label>
-            <input
-              s
-              placeholder="Jméno klienta"
+          <div className="flex flex-col w-64 m-5">
+            <Input
+              size="sm"
               name="client"
-              className={`p-2 rounded-lg ${
-                errors.client
-                  ? "border-red-500 dark:border-red-500"
-                  : "dark:border-cyan-300 border-zinc-300"
-              } border-2 dark:text-cyan-300 dark:placeholder:text-white`}
+              label="Klient"
+              isInvalid={errors.sdl ? true : false}
+              errorMessage={errors.client && "Zadej jméno klienta"}
+              variant="bordered"
+              className="w-64 p-0"
+              classNames={{
+                inputWrapper: "bg-white dark:bg-zinc-700",
+              }}
               type="text"
               {...register(`client`, {
                 required: {
                   value: true,
-                  message: "Zadej název klienta",
+                  message: "zadej jméno klienta",
                 },
               })}
             />
-            {errors.client && (
-              <div className="text-red-500">{errors.client.message}</div>
-            )}
           </div>
           <div className="flex flex-col w-64">
-            <label htmlFor="sdl" className="font-bold dark:text-cyan-300">
-              SDL#
-            </label>
-            <input
-              placeholder="SDL"
+            <Input
+              size="sm"
               name="sdl"
-              className={`p-2 rounded-lg ${
-                errors.sdl
-                  ? "border-red-500 dark:border-red-500"
-                  : "dark:border-cyan-300 border-zinc-300"
-              } border-2 dark:text-cyan-300 dark:placeholder:text-white`}
+              label="SDL"
+              isInvalid={errors.sdl ? true : false}
+              errorMessage={errors.sdl && "Zadej SDL referenci"}
+              variant="bordered"
+              className="w-64"
+              classNames={{
+                inputWrapper: "bg-white dark:bg-zinc-700",
+              }}
               type="text"
               {...register(`sdl`, {
                 required: {
                   value: true,
-                  message: "Zadej SDL referenci",
+                  message: "zadej SDL referenci",
                 },
               })}
             />
-            {errors.sdl && (
-              <div className="text-red-500">{errors.sdl.message}</div>
-            )}
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap gap-6">
+      <div className={`flex flex-wrap gap-6 ${shadow}`}>
         {fields?.map((field, index) => {
           return (
             <div
               key={field._id}
-              className="relative flex flex-col shadow-lg p-10 pt-0 dark:bg-zinc-900 bg-zinc-300 gap-3 h-fit w-80 rounded-xl"
+              className="relative flex flex-col shadow-lg p-10 pt-0 dark:bg-zinc-950 bg-zinc-300 gap-3 h-full w-96 rounded-xl"
             >
               <h1 className="text-center text-3xl p-4">Detaily zboží</h1>
               <div className="flex flex-col">
-                <label htmlFor="count" className="font-bold dark:text-cyan-300">
-                  Počet kusů
-                </label>
-                <input
-                  placeholder="Počet kusů"
+                <Input
                   name="count"
-                  defaultValue={defaultValues?.[index]?.count}
-                  className={`p-2 rounded-lg ${
-                    errors?.defaultValues?.[index]?.width
-                      ? "border-red-500 dark:border-red-500"
-                      : "dark:border-cyan-300 border-zinc-300"
-                  } border-2 dark:text-cyan-300 dark:placeholder:text-white`}
+                  placeholder="Počet"
+                  label="Počet"
+                  labelPlacement="outside"
+                  variant="faded"
+                  errorMessage={
+                    errors?.defaultValues?.[index]?.count && "Zadej počet"
+                  }
+                  classNames={{
+                    inputWrapper:
+                      "bg-white dark:bg-zinc-700 p-0 w-full overflow-hidden",
+                    input: "p-2",
+                  }}
+                  isInvalid={
+                    errors?.defaultValues?.[index]?.count ? true : false
+                  }
                   type="number"
                   {...register(`defaultValues.${index}.count`, {
                     required: {
                       value: true,
-                      message: "Zadej počet kusů",
+                      message: "Zadej počet",
                     },
                   })}
                 />
-                {errors?.defaultValues?.[index]?.count && (
-                  <div className="text-red-500">
-                    {errors?.defaultValues[index]?.count.message}
-                  </div>
-                )}
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col">
-                  <label
-                    htmlFor="long"
-                    className="font-bold dark:text-cyan-300"
-                  >
-                    Délka
-                  </label>
-                  <input
-                    placeholder="Délka"
+                  <Input
                     name="long"
-                    className={`p-2 rounded-lg ${
-                      errors?.defaultValues?.[index]?.width
-                        ? "border-red-500 dark:border-red-500"
-                        : "dark:border-cyan-300 border-zinc-300"
-                    } border-2 dark:text-cyan-300 dark:placeholder:text-white`}
+                    placeholder="Délka"
+                    label="Délka"
+                    labelPlacement="outside"
+                    variant="bordered"
+                    errorMessage={
+                      errors?.defaultValues?.[index]?.long && "Zadej délku"
+                    }
+                    classNames={{
+                      inputWrapper: "bg-white dark:bg-zinc-700 p-0",
+                      input: "p-2",
+                    }}
+                    endContent={
+                      <div>
+                        <span className="p-2">cm</span>
+                      </div>
+                    }
+                    isInvalid={
+                      errors?.defaultValues?.[index]?.long ? true : false
+                    }
                     type="number"
                     {...register(`defaultValues.${index}.long`, {
                       required: {
@@ -126,56 +160,60 @@ const ShipmentDetails = ({
                       },
                     })}
                   />
-                  {errors?.defaultValues?.[index]?.long && (
-                    <div className="text-red-500">
-                      {errors?.defaultValues[index]?.long.message}
-                    </div>
-                  )}
                 </div>
                 <div className="flex flex-col">
-                  <label
-                    htmlFor="width"
-                    className="font-bold dark:text-cyan-300"
-                  >
-                    Šířka
-                  </label>
-                  <input
-                    placeholder="Šířka"
+                  <Input
                     name="width"
-                    className={`p-2 rounded-lg ${
-                      errors?.defaultValues?.[index]?.width
-                        ? "border-red-500 dark:border-red-500"
-                        : "dark:border-cyan-300 border-zinc-300"
-                    } border-2 dark:text-cyan-300 dark:placeholder:text-white`}
+                    placeholder="Šířka"
+                    label="Šířka"
+                    labelPlacement="outside"
+                    variant="bordered"
+                    errorMessage={
+                      errors?.defaultValues?.[index]?.width && "Zadej šířku"
+                    }
+                    classNames={{
+                      inputWrapper: "bg-white dark:bg-zinc-700 p-0",
+                      input: "p-2",
+                    }}
+                    endContent={
+                      <div>
+                        <span className="p-2">cm</span>
+                      </div>
+                    }
+                    isInvalid={
+                      errors?.defaultValues?.[index]?.width ? true : false
+                    }
                     type="number"
                     {...register(`defaultValues.${index}.width`, {
                       required: {
                         value: true,
-                        message: "Zadej Šířku",
+                        message: "Zadej šířku",
                       },
                     })}
                   />
-                  {errors?.defaultValues?.[index]?.width && (
-                    <div className="text-red-500">
-                      {errors?.defaultValues[index]?.width.message}
-                    </div>
-                  )}
                 </div>
                 <div className="flex flex-col">
-                  <label
-                    htmlFor="high"
-                    className="font-bold dark:text-cyan-300"
-                  >
-                    Výška
-                  </label>
-                  <input
-                    placeholder="Výška"
+                  <Input
                     name="high"
-                    className={`p-2 rounded-lg ${
-                      errors?.defaultValues?.[index]?.width
-                        ? "border-red-500 dark:border-red-500"
-                        : "dark:border-cyan-300 border-zinc-300"
-                    } border-2 dark:text-cyan-300 dark:placeholder:text-white`}
+                    placeholder="Výška"
+                    label="Výška"
+                    labelPlacement="outside"
+                    variant="bordered"
+                    errorMessage={
+                      errors?.defaultValues?.[index]?.high && "Zadej výšku"
+                    }
+                    classNames={{
+                      inputWrapper: "bg-white dark:bg-zinc-700 p-0",
+                      input: "p-2",
+                    }}
+                    endContent={
+                      <div>
+                        <span className="p-2">cm</span>
+                      </div>
+                    }
+                    isInvalid={
+                      errors?.defaultValues?.[index]?.high ? true : false
+                    }
                     type="number"
                     {...register(`defaultValues.${index}.high`, {
                       required: {
@@ -184,27 +222,29 @@ const ShipmentDetails = ({
                       },
                     })}
                   />
-                  {errors?.defaultValues?.[index]?.high && (
-                    <div className="text-red-500">
-                      {errors?.defaultValues[index]?.high.message}
-                    </div>
-                  )}
                 </div>
                 <div className="flex flex-col">
-                  <label
-                    htmlFor="weight"
-                    className="font-bold dark:text-cyan-300 "
-                  >
-                    Váha
-                  </label>
-                  <input
+                  <Input
                     name="weight"
                     placeholder="Váha"
-                    className={`p-2 rounded-lg ${
-                      errors?.defaultValues?.[index]?.width
-                        ? "border-red-500 dark:border-red-500"
-                        : "dark:border-cyan-300 border-zinc-300"
-                    } border-2 dark:text-cyan-300 dark:placeholder:text-white`}
+                    label="Váha"
+                    labelPlacement="outside"
+                    variant="bordered"
+                    errorMessage={
+                      errors?.defaultValues?.[index]?.width && "Zadej váhu"
+                    }
+                    classNames={{
+                      inputWrapper: "bg-white dark:bg-zinc-700 p-0",
+                      input: "p-4",
+                    }}
+                    endContent={
+                      <div>
+                        <span className="p-2">kg</span>
+                      </div>
+                    }
+                    isInvalid={
+                      errors?.defaultValues?.[index]?.width ? true : false
+                    }
                     type="number"
                     {...register(`defaultValues.${index}.weight`, {
                       required: {
@@ -213,11 +253,6 @@ const ShipmentDetails = ({
                       },
                     })}
                   />
-                  {errors?.defaultValues?.[index]?.weight && (
-                    <div className="text-red-500">
-                      {errors?.defaultValues[index]?.weight.message}
-                    </div>
-                  )}
                 </div>
               </div>
               <AiOutlinePlus
@@ -242,26 +277,61 @@ const ShipmentDetails = ({
           );
         })}
       </div>
+      <CurrencyInput
+        fields={exwFields}
+        exwAppend={exwAppend}
+        register={register}
+        errors={errors}
+      />
+      <div className="flex flex-col justify-center items-center w-full">
+        <Input
+          name="price"
+          label="Price"
+          errorMessage={errors?.price && "Zadej prodejní cenu"}
+          isInvalid={errors.price ? true : false}
+          variant="bordered"
+          size="sm"
+          endContent={
+            <div>
+              <span>€</span>
+            </div>
+          }
+          className="w-64"
+          classNames={{
+            inputWrapper: "bg-white dark:bg-zinc-700 ",
+          }}
+          type="number"
+          {...register(`price`, {
+            required: {
+              value: true,
+              message: "Zadej cenu přepravy",
+            },
+          })}
+        />
+      </div>
       <div className="w-full flex justify-center items-center gap-5">
         <Button
           isDisabled={isSubmitting}
           type="submit"
-          className="dark:text-black dark:hover:text-black dark:hover:bg-cyan-200 dark:bg-cyan-300 mt-4 bg-slate-800 hover:text-white hover:bg-slate-700 text-white w-64 font-bold"
+          className="dark:text-black dark:hover:text-black dark:hover:bg-gray-300 dark:bg-gray-200 mt-4 bg-slate-800 hover:text-white hover:bg-slate-700 text-white w-64 font-bold"
         >
           {isSubmitting ? "Loading" : "Potvrdit"}
         </Button>
 
         <Button
           onClick={() =>
-            append({
-              count: "",
-              long: "",
-              width: "",
-              high: "",
-              weight: "",
-            })
+            append(
+              {
+                count: "",
+                long: "",
+                width: "",
+                high: "",
+                weight: "",
+              },
+              setShadow("d-block p-10 my-10 shadow-2xl")
+            )
           }
-          className="dark:text-black dark:hover:text-black dark:hover:bg-green-700 dark:bg-green-500 mt-4 bg-green-500 hover:text-white hover:bg-green-700 text-white w-64 font-bold"
+          className="dark:text-black dark:hover:text-black dark:hover:bg-green-400 dark:bg-green-500 mt-4 bg-green-500 hover:text-white hover:bg-green-400 text-white w-64 font-bold"
         >
           Přidat Detaily
         </Button>

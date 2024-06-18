@@ -8,11 +8,20 @@ const formFields = new Schema({
   weight: Number,
 });
 
+const exValue = new Schema({
+  cost: Number,
+});
+
 const cargoDetailsSchema = new Schema(
   {
     defaultValues: { type: [formFields], default: undefined },
+    exwork: { type: [exValue], default: undefined },
     client: String,
     sdl: String,
+    price: Number,
+    transport: String,
+    menaFrom: String,
+    menaTo: String,
   },
 
   { timestamps: true }

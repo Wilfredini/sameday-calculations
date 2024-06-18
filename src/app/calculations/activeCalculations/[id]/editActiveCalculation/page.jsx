@@ -18,17 +18,32 @@ const getCalculationById = async (id) => {
 export default async function EditCargoDetails({ params }) {
   const { id } = params;
   const { cargoDetails } = await getCalculationById(id);
-  const { defaultValues, sdl, client } = cargoDetails;
+  const {
+    defaultValues,
+    exwork,
+    sdl,
+    client,
+    price,
+    transport,
+    menaFrom,
+    menaTo,
+  } = cargoDetails;
+  const { _id } = defaultValues;
+  console.log(price);
   return (
-    <div className="dark:bg-zinc-800 w-full h-dvh flex bg-zinc-100 mx-auto p-10">
-      {" "}
+    <div className="dark:bg-zinc-800 w-full h-min-dvh flex bg-zinc-100 mx-auto relative">
       <EditCargoDetailsForm
         sdl={sdl}
         client={client}
+        price={price}
         defaultValues={defaultValues}
         id={id}
+        defaultValuesId={_id}
+        transport={transport}
+        exwork={exwork}
+        menaFrom={menaFrom}
+        menaTo={menaTo}
       />
-      {JSON.stringify({ cargoDetails })}
     </div>
   );
 }

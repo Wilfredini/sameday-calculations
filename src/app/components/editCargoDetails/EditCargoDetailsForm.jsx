@@ -5,13 +5,29 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import EditShipmentDetails from "./editShipmentDetails/EditShipmentDetails";
 
-const EditCargoDetailsForm = ({ id, sdl, client, defaultValues }) => {
+const EditCargoDetailsForm = ({
+  id,
+  sdl,
+  client,
+  defaultValues,
+  exwork,
+  price,
+  transport,
+  menaFrom,
+  menaTo,
+}) => {
   const router = useRouter();
+
   const onSubmit = async (data) => {
     const {
       defaultValues: newDefaultValues,
+      exwork: newExwork,
       sdl: newSdl,
       client: newClient,
+      price: newPrice,
+      transport: newTransport,
+      menaFrom: newMenaFrom,
+      menaTo: newMenaTo,
     } = data;
 
     try {
@@ -22,13 +38,18 @@ const EditCargoDetailsForm = ({ id, sdl, client, defaultValues }) => {
         },
         body: JSON.stringify({
           newDefaultValues,
+          newExwork,
           newSdl,
           newClient,
+          newPrice,
+          newTransport,
+          newMenaFrom,
+          newMenaTo,
         }),
       });
       if (res.ok) {
-        toast.success("Data uložena");
         router.push("/calculations/activeCalculations");
+        toast.success("Data uložena");
       } else {
         toast.error("Uložení dat selhalo");
       }
@@ -36,7 +57,6 @@ const EditCargoDetailsForm = ({ id, sdl, client, defaultValues }) => {
       toast.error("Při ukládání nastala chyba", error);
     }
   };
-
   const {
     register,
     handleSubmit,
@@ -44,14 +64,16 @@ const EditCargoDetailsForm = ({ id, sdl, client, defaultValues }) => {
     setError,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm(
-    {
-      defaultValues: defaultValues,
-      client: client,
-      sdl: sdl,
-    },
-    defaultValues
-  );
+  } = useForm({
+    defaultValues,
+    exwork,
+    client: client,
+    sdl: sdl,
+    price: price,
+    transport: transport,
+    menaFrom: menaFrom,
+    menaTo: menaTo,
+  });
 
   const { fields, append, remove } = useFieldArray({
     name: "defaultValues",
@@ -59,7 +81,7 @@ const EditCargoDetailsForm = ({ id, sdl, client, defaultValues }) => {
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full p-10">
       <form onSubmit={handleSubmit(onSubmit)}>
         <EditShipmentDetails
           fields={fields}
@@ -70,7 +92,14 @@ const EditCargoDetailsForm = ({ id, sdl, client, defaultValues }) => {
           isSubmitting={isSubmitting}
           client={client}
           sdl={sdl}
+          price={price}
           defaultValues={defaultValues}
+          id={id}
+          toast={toast}
+          transport={transport}
+          exwork={exwork}
+          menaFrom={menaFrom}
+          menaTo={menaTo}
         />
       </form>
 
